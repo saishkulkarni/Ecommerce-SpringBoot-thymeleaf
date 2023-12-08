@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="ISO-8859-1">
+	<title>Signup</title>
+	<style>
+		div {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+		}
+	</style>
+</head>
+
+<body>
+	<div>
+		<h1>Customer Signup</h1>
+		<form action="/customer/signup" th:object="${customer}" method="post">
+			<fieldset>
+				<legend>Signup here,</legend>
+				<table>
+					<tr>
+						<th>Name: </th>
+						<th><input type="text" th:field="*{name}" name="name"></th>
+						<td th:errors="*{name}"></td>
+					</tr>
+					<tr>
+						<th>Email: </th>
+						<th><input type="email" th:field="*{email}" name="email"></th>
+						<td th:errors="*{email}"></td>
+					</tr>
+					<tr>
+						<th>Password: </th>
+						<th><input type="text" name="password" th:field="*{password}"></th>
+						<td th:errors="*{password}"></td>
+					</tr>
+					<tr>
+						<th>Mobile: </th>
+						<th><input type="tel" th:field="*{mobile}" name="mobile"></th>
+						<td th:errors="*{mobile}"></td>
+					</tr>
+					<tr>
+						<th>Date of Birth: </th>
+						<th><input type="date" th:field="*{dob}" name="dob"></th>
+						<td th:errors="*{dob}"></td>
+					</tr>
+					<tr>
+						<th>Gender: </th>
+						<th>
+							<input type="radio" name="gender" value="male">Male
+							<input type="radio" name="gender" value="female">Female
+						</th>
+						<td th:errors="*{gender}"></td>
+					</tr>
+					<tr>
+						<th><button>Signup</button></th>
+						<th><button type="reset">Cancel</button></th>
+					</tr>
+				</table>
+			</fieldset>
+		</form>
+		<a href="/"><button>Back</button></a>
+	</div>
+
+
+</body>
+
+</html>
