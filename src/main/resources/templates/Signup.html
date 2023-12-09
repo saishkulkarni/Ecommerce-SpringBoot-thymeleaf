@@ -16,6 +16,7 @@
 
 <body>
 	<div>
+		<h1 th:text="${fail}"></h1>
 		<h1>Customer Signup</h1>
 		<form action="/customer/signup" th:object="${customer}" method="post">
 			<fieldset>

@@ -4,6 +4,10 @@ import java.time.LocalDate;
 
 import org.springframework.stereotype.Component;
 
+import jakarta.persistence.Entity;
+import jakarta.persistence.GeneratedValue;
+import jakarta.persistence.Id;
+import jakarta.persistence.SequenceGenerator;
 import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;
 import jakarta.validation.constraints.Email;
@@ -16,7 +20,12 @@ import lombok.Data;
 
 @Data
 @Component
+@Entity
 public class Customer {
+	@Id
+	@GeneratedValue(generator = "slno")
+	@SequenceGenerator(initialValue = 101, allocationSize = 1, sequenceName = "slno", name = "slno")
+	private int id;
 	@NotEmpty(message = "*This is Mandatory")
 	@Size(max = 10, min = 3, message = "*Enter between 3 to 10")
 	private String name;

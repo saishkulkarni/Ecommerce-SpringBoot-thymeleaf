@@ -9,6 +9,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 import com.jsp.ecommerce.dto.Customer;
+import com.jsp.ecommerce.service.CustomerService;
 
 import jakarta.validation.Valid;
 
@@ -19,18 +20,20 @@ public class CustomerController {
 	@Autowired
 	Customer customer;
 	
+	@Autowired
+	CustomerService customerService;
+	
 	@GetMapping("/signup")
 	public String loadSignup(ModelMap map) {
 		map.put("customer",customer);
 		return "Signup";
 	}
-
 	@PostMapping("/signup")
-	public String signup(@Valid Customer customer, BindingResult result) {
+	public String signup(@Valid Customer customer, BindingResult result,ModelMap map) {
 		if (result.hasErrors()) {
 			return "Signup";
 		} else {
-			return "AboutUs.html";
+			return customerService.signup(customer,map);
 		}
 	}
 
