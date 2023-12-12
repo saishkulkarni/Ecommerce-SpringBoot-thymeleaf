@@ -9,6 +9,7 @@ import org.springframework.ui.ModelMap;
 
 import com.jsp.ecommerce.dao.CustomerDao;
 import com.jsp.ecommerce.dto.Customer;
+import com.jsp.ecommerce.helper.AES;
 
 import jakarta.validation.Valid;
 
@@ -27,6 +28,7 @@ public class CustomerService {
 		else{
 			int otp=new Random().nextInt(100000,999999);
 			customer.setOtp(otp);
+			customer.setPassword(AES.encrypt(customer.getPassword(), "123"));
 			customerDao.save(customer);
 			//Logic for Sending Mail
 			
