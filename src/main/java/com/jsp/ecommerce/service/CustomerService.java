@@ -1,5 +1,6 @@
 package com.jsp.ecommerce.service;
 
+import java.util.List;
 import java.util.Random;
 
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,15 +18,20 @@ public class CustomerService {
 	CustomerDao customerDao;
 
 	public String signup(Customer customer, ModelMap map) {
-		Customer exCustomer=customerDao.findByEmail(customer.getEmail());
-		if(exCustomer!=null)
+		List<Customer> exCustomers=customerDao.findByEmailOrMobile(customer.getEmail(),customer.getMobile());
+		if(!exCustomers.isEmpty())
 		{
 			map.put("fail","Account Already Exists");
 			return "Signup";
 		}
 		else{
 			int otp=new Random().nextInt(100000,999999);
-			return "AboutUs";
+			customer.setOtp(otp);
+			customerDao.save(customer);
+			//Logic for Sending Mail
+			
+			map.put("id", customer.getId());
+			return "EnterOtp";
 		}
 	}
 

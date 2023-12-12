@@ -1,5 +1,7 @@
 package com.jsp.ecommerce.dao;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -8,12 +10,16 @@ import com.jsp.ecommerce.repository.CustomerRepository;
 
 @Repository
 public class CustomerDao {
-	
+
 	@Autowired
 	CustomerRepository customerRepository;
 
-	public Customer findByEmail(String email) {
-		return customerRepository.findByEmail(email);
+	public List<Customer> findByEmailOrMobile(String email, long mobile) {
+		return customerRepository.findByEmailOrMobile(email, mobile);
+	}
+
+	public void save(Customer customer) {
+		customerRepository.save(customer);
 	}
 
 }

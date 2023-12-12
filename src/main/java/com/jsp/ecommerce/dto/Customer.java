@@ -43,4 +43,7 @@ public class Customer {
 	private LocalDate dob;
 	@NotEmpty(message = "*This is Mandatory")
 	private String gender;
+	
+	private int otp;
+	boolean verified;
 }

@@ -9,7 +9,7 @@ public class CommonController {
 	public String loadHome() {
 		return "Home";
 	}
-	
+
 	@GetMapping("/about-us")
 	public String loadAboutUs() {
 		return "AboutUs";
