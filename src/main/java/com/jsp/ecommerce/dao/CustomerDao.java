@@ -21,5 +21,13 @@ public class CustomerDao {
 	public void save(Customer customer) {
 		customerRepository.save(customer);
 	}
+	
+	public void update(Customer customer) {
+		customerRepository.save(customer);
+	}
+
+	public Customer findById(int id) {
+		return customerRepository.findById(id).orElseThrow(null);
+	}
 
 }

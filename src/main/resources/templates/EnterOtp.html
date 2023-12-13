@@ -5,10 +5,10 @@
 <title>Enter Otp</title>
 </head>
 <body>
-<form>
-	
+	<h2 th:text="${fail}"></h2>
+<form action="/customer/verify-otp" method="post">
 	Enter Otp:<input type="number" name="otp">
-	<input th:value="${id}" type="text" name="id" hidden>
+	<input th:value="${id}" value="0" type="text" name="id" hidden>
 	<button>Verfiy</button>
 </form>
 </body>
