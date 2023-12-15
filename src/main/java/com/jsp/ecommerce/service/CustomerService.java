@@ -55,4 +55,55 @@ public class CustomerService {
 		}
 	}
 
+	public String login(String emph, String password, ModelMap map) {
+		if(emph.equals("admin") && password.equals("admin"))
+		{
+			map.put("pass", "Admin Login Success");
+			return "AdminHome";
+		}
+		else {
+			long mobile=0;
+			String email=null;
+			try {
+			mobile=Long.parseLong(emph);
+			}
+			catch (NumberFormatException e) {
+				email=emph;
+			}
+			
+			List<Customer> customers=customerDao.findByEmailOrMobile(email, mobile);
+			if(customers.isEmpty())
+			{
+				map.put("fail", "Invalid Email or Mobile");
+				return "Login.html";
+			}
+			else {
+				Customer customer=customers.get(0);
+				if(AES.decrypt(customer.getPassword(),"123").equals(password))
+				{
+					if(customer.isVerified())
+					{
+						map.put("pass", "Login Success");
+						return "CustomerHome";
+					}
+					else {
+						int otp = new Random().nextInt(100000, 999999);
+						customer.setOtp(otp);
+						customerDao.save(customer);
+						// Send OTP to email
+						// emailLogic.sendOtp(customer);
+						// Carrying id
+						map.put("fail", "Verify First");
+						map.put("id", customer.getId());
+						return "EnterOtp";
+					}
+				}
+				else {
+					map.put("fail", "Invalid Password");
+					return "Login.html";
+				}
+			}
+		}
+	}
+
 }

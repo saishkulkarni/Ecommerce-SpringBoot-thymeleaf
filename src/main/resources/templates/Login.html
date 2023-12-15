@@ -1,11 +1,46 @@
 <!DOCTYPE html>
 <html>
+
 <head>
-<meta charset="ISO-8859-1">
-<title>Login</title>
+	<meta charset="ISO-8859-1">
+	<title>Login</title>
+	<style>
+		div {
+			display: flex;
+			flex-direction: column;
+			align-items: center;
+			justify-content: center;
+		}
+	</style>
 </head>
+
 <body>
-	<h2 th:text="${pass}"></h2>
-<h1>Login</h1>
+	<div>
+		<h2 th:text="${fail}"></h2>
+		<h2 th:text="${pass}"></h2>
+		<h1>Login</h1>
+		<form action="/login" method="post">
+			<fieldset>
+				<legend>Login here,</legend>
+				<table>
+					<tr>
+						<th>Email / Mobile: </th>
+						<th><input type="text" name="emph"></th>
+					</tr>
+					<tr>
+						<th>Password: </th>
+						<th><input type="password" name="password"></th>
+					</tr>
+					<tr>
+						<th><button>Login</button></th>
+						<th><button type="reset">Cancel</button></th>
+					</tr>
+				</table>
+			</fieldset>
+		</form>
+		<a href="/"><button>Back</button></a>
+	</div>
+
 </body>
+
 </html>
