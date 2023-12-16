@@ -12,6 +12,8 @@ import com.jsp.ecommerce.dto.Customer;
 import com.jsp.ecommerce.helper.AES;
 import com.jsp.ecommerce.helper.EmailLogic;
 
+import jakarta.servlet.http.HttpSession;
+
 @Service
 public class CustomerService {
 	@Autowired
@@ -55,9 +57,10 @@ public class CustomerService {
 		}
 	}
 
-	public String login(String emph, String password, ModelMap map) {
+	public String login(String emph, String password, ModelMap map, HttpSession session) {
 		if(emph.equals("admin") && password.equals("admin"))
 		{
+			session.setAttribute("admin", "admin");
 			map.put("pass", "Admin Login Success");
 			return "AdminHome";
 		}
@@ -83,6 +86,7 @@ public class CustomerService {
 				{
 					if(customer.isVerified())
 					{
+						session.setAttribute("customer", customer);
 						map.put("pass", "Login Success");
 						return "CustomerHome";
 					}

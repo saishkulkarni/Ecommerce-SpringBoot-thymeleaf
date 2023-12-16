@@ -1,0 +1,20 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="ISO-8859-1">
+<title>Add Product</title>
+</head>
+<body>
+<h1>Add Product</h1>
+<form action="/admin/add-product" method="post" enctype="multipart/form-data">
+	Name:<input type="text" name="name"><br>
+	Image:<input type="file" name="pic"><br>
+	Price:<input type="text" name="price"><br>
+	Stock:<input type="text" name="stock"><br>
+	Category:<input type="text" name="category"><br>
+	<button>Add</button>
+</form>
+<br>
+<a href="/admin/home"><button>Back</button></a>
+</body>
+</html>
