@@ -13,29 +13,26 @@ import com.jsp.ecommerce.dto.Product;
 
 @Service
 public class AdminService {
-	
+
 	@Autowired
 	ProductDao productDao;
 
 	public String addProduct(Product product, MultipartFile pic, ModelMap map) throws IOException {
-		byte[] picture=new byte[pic.getInputStream().available()];
+		byte[] picture = new byte[pic.getInputStream().available()];
 		pic.getInputStream().read(picture);
-		
 		product.setPicture(picture);
 		productDao.save(product);
-		
+
 		map.put("pass", "Product Added Success");
 		return "AdminHome";
 	}
 
 	public String fetchProducts(ModelMap map) {
-		List<Product> products=productDao.fetchAll();
-		if(products.isEmpty())
-		{
+		List<Product> products = productDao.fetchAll();
+		if (products.isEmpty()) {
 			map.put("fail", "No Products Found");
 			return "AdminHome";
-		}
-		else {
+		} else {
 			map.put("products", products);
 			return "AdminViewProduct";
 		}

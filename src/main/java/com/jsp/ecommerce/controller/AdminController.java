@@ -53,10 +53,9 @@ public class AdminController {
 			return "Home";
 		}
 	}
-	
+
 	@GetMapping("/fetch-products")
-	public String fetchProducts(HttpSession session,ModelMap map)
-	{
+	public String fetchProducts(HttpSession session, ModelMap map) {
 		if (session.getAttribute("admin") != null) {
 			return adminService.fetchProducts(map);
 		} else {

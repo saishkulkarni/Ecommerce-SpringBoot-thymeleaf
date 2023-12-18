@@ -1,5 +1,7 @@
 package com.jsp.ecommerce.dto;
 
+import org.apache.commons.codec.binary.Base64;
+
 import jakarta.persistence.Column;
 import jakarta.persistence.Entity;
 import jakarta.persistence.GeneratedValue;
@@ -23,4 +25,9 @@ public class Product {
 	@Column(columnDefinition = "MEDIUMBLOB")
 	private byte[] picture;
 	private boolean display;
+	
+	public String generateBase64Image()
+	{
+	    return Base64.encodeBase64String(this.getPicture());
+	}
 }
