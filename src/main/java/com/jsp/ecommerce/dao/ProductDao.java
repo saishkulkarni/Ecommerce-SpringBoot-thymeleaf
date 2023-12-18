@@ -1,5 +1,7 @@
 package com.jsp.ecommerce.dao;
 
+import java.util.List;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Repository;
 
@@ -13,6 +15,10 @@ public class ProductDao {
 
 	public void save(Product product) {
 		productRepository.save(product);
+	}
+
+	public List<Product> fetchAll() {
+		return productRepository.findAll();
 	}
 	
 	

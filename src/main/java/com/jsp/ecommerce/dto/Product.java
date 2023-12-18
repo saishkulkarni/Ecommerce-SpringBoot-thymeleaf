@@ -22,4 +22,5 @@ public class Product {
 	@Lob
 	@Column(columnDefinition = "MEDIUMBLOB")
 	private byte[] picture;
+	private boolean display;
 }

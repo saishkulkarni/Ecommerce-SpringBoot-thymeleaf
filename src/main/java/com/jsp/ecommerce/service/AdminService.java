@@ -1,6 +1,7 @@
 package com.jsp.ecommerce.service;
 
 import java.io.IOException;
+import java.util.List;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
@@ -25,6 +26,19 @@ public class AdminService {
 		
 		map.put("pass", "Product Added Success");
 		return "AdminHome";
+	}
+
+	public String fetchProducts(ModelMap map) {
+		List<Product> products=productDao.fetchAll();
+		if(products.isEmpty())
+		{
+			map.put("fail", "No Products Found");
+			return "AdminHome";
+		}
+		else {
+			map.put("products", products);
+			return "AdminViewProduct";
+		}
 	}
 
 }
