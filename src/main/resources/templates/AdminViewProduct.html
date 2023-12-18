@@ -2,39 +2,95 @@
 <html>
 
 <head>
-	<meta charset="ISO-8859-1">
-	<title>Product Table</title>
+    <meta charset="ISO-8859-1">
+    <title>Product Table</title>
+
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        table {
+            width: 80%;
+            margin: 20px auto;
+            border-collapse: collapse;
+        }
+
+        th, td {
+            border: 1px solid #ddd;
+            padding: 8px;
+            text-align: left;
+        }
+
+        th {
+            background-color: #f2f2f2;
+        }
+
+        img {
+            max-width: 100px;
+            max-height: 100px;
+        }
+
+        button {
+            padding: 8px 16px;
+            font-size: 14px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            border-radius: 4px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        a button {
+            background-color: #333;
+        }
+
+        a button:hover {
+            background-color: #555;
+        }
+    </style>
 </head>
 
 <body>
-	<h1>Product List</h1>
-	<table border="1">
-		<tr>
-			<th>Name</th>
-			<th>Picture</th>
-			<th>Category</th>
-			<th>Stock</th>
-			<th>Price</th>
-			<th>Action</th>
-			<th>Edit</th>
-			<th>Delete</th>
-		</tr>
-		<tr th:each="product:${products}">
-			<td th:text="${product.name}"></td>
-			<td><img th:src="@{'data:image/jpeg;base64,'+${product.generateBase64Image()}}"></td>
-			<td th:text="${product.category}"></td>
-			<td th:text="${product.stock}">Stock</td>
-			<td th:text="${product.price}">Price</td>
-			<td th:if="${product.display==false}"><button>Show</button></td>
-			<td th:if="${product.display==true}"><button>Hide</button></td>
-			<td><button>Edit</button></td>
-			<td><button>Delete</button></td>
-		</tr>
+    <h1>Product List</h1>
+    <table>
+        <tr>
+            <th>Name</th>
+            <th>Picture</th>
+            <th>Category</th>
+            <th>Stock</th>
+            <th>Price</th>
+            <th>Action</th>
+            <th>Edit</th>
+            <th>Delete</th>
+        </tr>
+        <tr th:each="product:${products}">
+            <td th:text="${product.name}"></td>
+            <td><img th:src="@{'data:image/jpeg;base64,'+${product.generateBase64Image()}}"></td>
+            <td th:text="${product.category}"></td>
+            <td th:text="${product.stock}"></td>
+            <td th:text="${product.price}"></td>
+            <td th:if="${product.display==false}"><button>Show</button></td>
+            <td th:if="${product.display==true}"><button>Hide</button></td>
+            <td><button>Edit</button></td>
+            <td><button>Delete</button></td>
+        </tr>
+    </table>
 
-	</table>
-
-	<br>
-	<a href="/admin/home"><button>Back</button></a>
+    <br>
+    <a href="/admin/home"><button>Back</button></a>
 </body>
 
 </html>

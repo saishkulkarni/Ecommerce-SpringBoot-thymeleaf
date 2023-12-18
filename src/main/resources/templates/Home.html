@@ -4,11 +4,61 @@
 <head>
 	<meta charset="ISO-8859-1">
 	<title>Insert title here</title>
+	<style>* {
+			margin: 0;
+			padding: 0;
+		}
+		body {
+			font-family: Arial, sans-serif;
+			margin: 20px;
+			text-align: center;
+		}
+
+		h1 {
+			color: #333;
+		}
+
+		h2 {
+			color: green;
+			font-size: 24px;
+		}
+
+		h3 {
+			color: red;
+			font-size: 24px;
+		}
+
+		button {
+			padding: 10px 20px;
+			margin: 5px;
+			font-size: 16px;
+			cursor: pointer;
+			background-color: #4CAF50;
+			color: #fff;
+			border: none;
+			border-radius: 5px;
+		}
+
+		button:hover {
+			background-color: #45a049;
+		}
+	</style>
+
+	<script>
+		document.addEventListener("DOMContentLoaded", function () {
+			setTimeout(function () {
+				var h2Elements = document.querySelectorAll('h2, h3');
+				h2Elements.forEach(function (element) {
+					element.style.display = 'none';
+				});
+			}, 1000);
+		});
+	</script>
 </head>
 
 <body>
-	<h2 th:text="${pass}"></h2>
-	<h2 th:text="${fail}"></h2>
+	<h2 th:text="${pass}">This is an h2 element</h2>
+	<h3 th:text="${fail}">This is an h3 element</h3>
 	<h1>Home Page</h1>
 	<a href="/about-us"><button>About Us</button></a>
 	<a href="/customer/signup"><button>Signup</button></a>
