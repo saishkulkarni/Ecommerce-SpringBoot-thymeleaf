@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.ModelMap;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -58,6 +59,16 @@ public class AdminController {
 	public String fetchProducts(HttpSession session, ModelMap map) {
 		if (session.getAttribute("admin") != null) {
 			return adminService.fetchProducts(map);
+		} else {
+			map.put("fail", "Session Expired, Login Again");
+			return "Home";
+		}
+	}
+
+	@GetMapping("/change/{id}")
+	public String changeStatus(@PathVariable int id, HttpSession session, ModelMap map) {
+		if (session.getAttribute("admin") != null) {
+			return adminService.changeStatus(id,map);
 		} else {
 			map.put("fail", "Session Expired, Login Again");
 			return "Home";

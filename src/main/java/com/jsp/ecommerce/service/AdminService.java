@@ -38,4 +38,17 @@ public class AdminService {
 		}
 	}
 
+	public String changeStatus(int id, ModelMap map) {
+		Product product=productDao.findById(id);
+		if(product.isDisplay())
+			product.setDisplay(false);
+		else
+			product.setDisplay(true);
+		
+		productDao.save(product);
+		
+		map.put("pass", "Status Update Success");
+		return fetchProducts(map);
+	}
+
 }

@@ -20,6 +20,10 @@ public class ProductDao {
 	public List<Product> fetchAll() {
 		return productRepository.findAll();
 	}
+
+	public Product findById(int id) {
+		return productRepository.findById(id).orElse(null);
+	}
 	
 	
 }
