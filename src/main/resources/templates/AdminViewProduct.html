@@ -86,8 +86,8 @@
 			<td th:text="${product.price}"></td>
 			<td th:if="${product.display==false}"><a th:href="@{'/admin/change/'+${product.id}}"><button>Show</button></a></td>
 			<td th:if="${product.display==true}"><a th:href="@{'/admin/change/'+${product.id}}"><button>Hide</button></a></td>
-			<td><button>Edit</button></td>
-			<td><button>Delete</button></td>
+			<td><a th:href="@{'/admin/edit/'+${product.id}}"><button>Edit</button></a></td>
+			<td><a th:href="@{'/admin/delete/'+${product.id}}"><button>Delete</button></a></td>
 		</tr>
 	</table>
 

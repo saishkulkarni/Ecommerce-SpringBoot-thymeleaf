@@ -1,0 +1,83 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="ISO-8859-1">
+    <title>Edit Product</title>
+    <style>
+		*{
+			margin:0;
+			padding:0;
+		}
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        form {
+            background-color: #fff;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            padding: 20px;
+            width: 300px;
+            margin: 20px auto;
+            margin-bottom: 0;
+        }
+
+        input {
+            width: calc(100% - 10px);
+            padding: 8px;
+            margin: 5px 0;
+            border: 1px solid #ccc;
+            border-radius: 3px;
+            box-sizing: border-box;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+
+        a button {
+            background-color: #333;
+        }
+
+        a button:hover {
+            background-color: #555;
+        }
+    </style>
+</head>
+
+<body>
+    <h1>Add Product</h1>
+    <form action="/admin/update-product" th:object="${product}" method="post" enctype="multipart/form-data">"
+        Name:<input type="text" th:field="*{name}" name="name"><br>
+        Image:<input type="file" name="pic"><br>
+        <img th:src="@{'data:image/jpeg;base64,'+${product.generateBase64Image()}}">
+        <input  th:field="*{id}" type="hidden" name="id">
+        Price:<input type="text" th:field="*{price}" name="price"><br>
+        Stock:<input type="text" th:field="*{stock}" name="stock"><br>
+        Category:<input type="text" th:field="*{category}" name="category"><br>
+        <button>Update</button>
+    </form>
+    <br>
+    <a href="/admin/home"><button>Back</button></a>
+</body>
+
+</html>

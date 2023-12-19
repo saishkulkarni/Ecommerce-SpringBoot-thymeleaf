@@ -51,4 +51,33 @@ public class AdminService {
 		return fetchProducts(map);
 	}
 
+	public String deleteProduct(int id, ModelMap map) {
+		Product product=productDao.findById(id);
+		productDao.delete(product);
+		
+		map.put("pass", "Product Deleted Success");
+		return fetchProducts(map);
+	}
+
+	public String editProduct(int id, ModelMap map) {
+		Product product=productDao.findById(id);
+		map.put("product", product);
+		return "EditProduct.html";
+	}
+
+	public String updateProduct(Product product, MultipartFile pic, ModelMap map) throws IOException {
+		byte[] picture = new byte[pic.getInputStream().available()];
+		pic.getInputStream().read(picture);
+		
+		if(picture.length==0)
+			product.setPicture(productDao.findById(product.getId()).getPicture());
+		else
+		product.setPicture(picture);
+		
+		productDao.save(product);
+
+		map.put("pass", "Product Updated Success");
+		return fetchProducts(map);
+	}
+
 }

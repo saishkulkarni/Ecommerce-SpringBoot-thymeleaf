@@ -24,6 +24,10 @@ public class ProductDao {
 	public Product findById(int id) {
 		return productRepository.findById(id).orElse(null);
 	}
+
+	public void delete(Product product) {
+		productRepository.delete(product);
+	}
 	
 	
 }

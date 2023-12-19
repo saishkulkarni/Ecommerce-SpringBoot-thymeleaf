@@ -74,4 +74,35 @@ public class AdminController {
 			return "Home";
 		}
 	}
+	
+	@GetMapping("/delete/{id}")
+	public String deleteProduct(@PathVariable int id, HttpSession session, ModelMap map) {
+		if (session.getAttribute("admin") != null) {
+			return adminService.deleteProduct(id,map);
+		} else {
+			map.put("fail", "Session Expired, Login Again");
+			return "Home";
+		}
+	}
+	
+	@GetMapping("/edit/{id}")
+	public String editProduct(@PathVariable int id, HttpSession session, ModelMap map) {
+		if (session.getAttribute("admin") != null) {
+			return adminService.editProduct(id,map);
+		} else {
+			map.put("fail", "Session Expired, Login Again");
+			return "Home";
+		}
+	}
+	
+	@PostMapping("/update-product")
+	public String updateProduct(Product product, @RequestParam MultipartFile pic, HttpSession session, ModelMap map)
+			throws IOException {
+		if (session.getAttribute("admin") != null) {
+			return adminService.updateProduct(product, pic, map);
+		} else {
+			map.put("fail", "Session Expired, Login Again");
+			return "Home";
+		}
+	}
 }
