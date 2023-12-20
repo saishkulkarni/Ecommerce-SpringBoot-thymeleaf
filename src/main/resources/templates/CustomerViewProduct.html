@@ -38,6 +38,11 @@
 		th {
 			background-color: #f2f2f2;
 		}
+		
+		a{
+			text-decoration: none;
+			font-size: 40px;
+		}
 
 		img {
 			max-width: 100px;
@@ -87,27 +92,26 @@
 			<th>Name</th>
 			<th>Picture</th>
 			<th>Category</th>
-			<th>Stock</th>
 			<th>Price</th>
-			<th>Action</th>
-			<th>Edit</th>
-			<th>Delete</th>
+			<th>Stock</th>
+			<th>Remove</th>
+			<th>Quantity</th>
+			<th>Add</th>
 		</tr>
 		<tr th:each="product:${products}">
 			<td th:text="${product.name}"></td>
 			<td><img th:src="@{'data:image/jpeg;base64,'+${product.generateBase64Image()}}"></td>
 			<td th:text="${product.category}"></td>
-			<td th:text="${product.stock}"></td>
 			<td th:text="${product.price}"></td>
-			<td th:if="${product.display==false}"><a th:href="@{'/admin/change/'+${product.id}}"><button>Show</button></a></td>
-			<td th:if="${product.display==true}"><a th:href="@{'/admin/change/'+${product.id}}"><button>Hide</button></a></td>
-			<td><a th:href="@{'/admin/edit/'+${product.id}}"><button>Edit</button></a></td>
-			<td><a th:href="@{'/admin/delete/'+${product.id}}"><button>Delete</button></a></td>
+			<td th:text="${product.stock}"></td>
+			<td><a href="">-</a></td>
+			<td>0</td>
+			<td><a href="">+</a></td>
 		</tr>
 	</table>
 
 	<br>
-	<a href="/admin/home"><button>Back</button></a>
+	<a href="/customer/home"><button>Back</button></a>
 </body>
 
 </html>

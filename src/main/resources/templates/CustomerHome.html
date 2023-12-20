@@ -1,11 +1,62 @@
 <!DOCTYPE html>
 <html>
 <head>
-<meta charset="ISO-8859-1">
-<title>Insert title here</title>
+    <meta charset="ISO-8859-1">
+    <title>Customer Home</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+            text-align: center;
+        }
+
+        h2 {
+            color: green;
+        }
+        
+        h3 {
+            color: red;
+        }
+
+        h1 {
+            color: #333;
+        }
+
+        button {
+            padding: 10px 20px;
+            font-size: 16px;
+            cursor: pointer;
+            background-color: #4CAF50;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            margin: 10px;
+            text-decoration: none;
+        }
+
+        button:hover {
+            background-color: #45a049;
+        }
+    </style>
+    <script>
+		document.addEventListener("DOMContentLoaded", function () {
+			setTimeout(function () {
+				var h2Elements = document.querySelectorAll('h2, h3');
+				h2Elements.forEach(function (element) {
+					element.style.display = 'none';
+				});
+			}, 1000);
+		});
+	</script>
 </head>
+
 <body>
 <h2 th:text="${pass}"></h2>
+<h3 th:text="${fail}"></h3>
 <h1>Customer Home</h1>
+<a href="/customer/fetch-products"><button>View Products</button></a>
+<a href="/logout"><button>Logout</button></a>
 </body>
 </html>

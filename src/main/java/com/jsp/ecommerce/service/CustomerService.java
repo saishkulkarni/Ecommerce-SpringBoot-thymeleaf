@@ -8,7 +8,9 @@ import org.springframework.stereotype.Service;
 import org.springframework.ui.ModelMap;
 
 import com.jsp.ecommerce.dao.CustomerDao;
+import com.jsp.ecommerce.dao.ProductDao;
 import com.jsp.ecommerce.dto.Customer;
+import com.jsp.ecommerce.dto.Product;
 import com.jsp.ecommerce.helper.AES;
 import com.jsp.ecommerce.helper.EmailLogic;
 
@@ -18,6 +20,9 @@ import jakarta.servlet.http.HttpSession;
 public class CustomerService {
 	@Autowired
 	CustomerDao customerDao;
+	
+	@Autowired
+	ProductDao productDao;
 
 	@Autowired
 	EmailLogic emailLogic;
@@ -107,6 +112,17 @@ public class CustomerService {
 					return "Login.html";
 				}
 			}
+		}
+	}
+
+	public String fetchProducts(ModelMap map) {
+		List<Product> products = productDao.fetchDisplayProducts();
+		if (products.isEmpty()) {
+			map.put("fail", "No Products Present");
+			return "CustomerHome";
+		} else {
+			map.put("products", products);
+			return "CustomerViewProduct";
 		}
 	}
 

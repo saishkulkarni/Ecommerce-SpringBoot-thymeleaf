@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 import com.jsp.ecommerce.dto.Customer;
 import com.jsp.ecommerce.service.CustomerService;
 
+import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
 
 @RequestMapping("/customer")
@@ -29,6 +30,17 @@ public class CustomerController {
 		map.put("customer",customer);
 		return "Signup";
 	}
+	
+	@GetMapping("/home")
+	public String loadHome(HttpSession session, ModelMap map) {
+		if (session.getAttribute("customer") != null)
+			return "CustomerHome";
+		else {
+			map.put("fail", "Session Expired, Login Again");
+			return "Home";
+		}
+	}
+	
 	@PostMapping("/signup")
 	public String signup(@Valid Customer customer, BindingResult result,ModelMap map) {
 		if (result.hasErrors()) {
@@ -42,6 +54,17 @@ public class CustomerController {
 	public String verifyOtp(@RequestParam int otp,@RequestParam int id,ModelMap map)
 	{
 		return customerService.verifyOtp(id,otp,map);
+	}
+	
+	@GetMapping("/fetch-products")
+	public String fetchProducts(HttpSession session,ModelMap map)
+	{
+		if (session.getAttribute("customer") != null) {
+			return customerService.fetchProducts(map);
+		} else {
+			map.put("fail", "Session Expired, Login Again");
+			return "Home";
+		}
 	}
 	
 
