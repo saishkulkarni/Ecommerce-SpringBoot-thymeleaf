@@ -4,9 +4,12 @@ import java.time.LocalDate;
 
 import org.springframework.stereotype.Component;
 
+import jakarta.persistence.CascadeType;
 import jakarta.persistence.Entity;
+import jakarta.persistence.FetchType;
 import jakarta.persistence.GeneratedValue;
 import jakarta.persistence.Id;
+import jakarta.persistence.OneToOne;
 import jakarta.persistence.SequenceGenerator;
 import jakarta.validation.constraints.DecimalMax;
 import jakarta.validation.constraints.DecimalMin;
@@ -46,4 +49,7 @@ public class Customer {
 	
 	private int otp;
 	boolean verified;
+	
+	@OneToOne(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
+	ShoppingCart cart;
 }
