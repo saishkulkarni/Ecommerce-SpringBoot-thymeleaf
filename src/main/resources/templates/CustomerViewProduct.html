@@ -106,14 +106,14 @@
 			<td th:text="${product.name}"></td>
 			<td><img th:src="@{'data:image/jpeg;base64,'+${product.generateBase64Image()}}"></td>
 			<td th:text="${product.category}"></td>
-			<td th:text="${product.price}"></td>
+			<td th:text="${product.price}+'&#8377'"></td>
 			<td th:text="${product.stock}"></td>
-			<td><a href="">-</a></td>
+			<td><a th:href="@{'/customer/cart-remove/'+${product.id}}">-</a></td>
 			<td>0</td>
 			<td><a th:href="@{'/customer/cart-add/'+${product.id}}">+</a></td>
 		</tr>
 	</table>
-
+<a href="/customer/fetch-cart"><button>Proceed to Cart</button></a>
 	<br>
 	<a href="/customer/home"><button>Back</button></a>
 </body>

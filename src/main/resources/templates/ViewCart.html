@@ -3,7 +3,7 @@
 
 <head>
 	<meta charset="ISO-8859-1">
-	<title>Product Table</title>
+	<title>Customer Cart</title>
 
 	<style>
 		body {
@@ -17,9 +17,13 @@
 		h1 {
 			color: #333;
 		}
-		
-		h2{
+
+		h2 {
 			color: green;
+		}
+
+		h3 {
+			color: red;
 		}
 
 		table {
@@ -37,6 +41,11 @@
 
 		th {
 			background-color: #f2f2f2;
+		}
+
+		a {
+			text-decoration: none;
+			font-size: 40px;
 		}
 
 		img {
@@ -66,7 +75,7 @@
 			background-color: #555;
 		}
 	</style>
-	
+
 	<script>
 		document.addEventListener("DOMContentLoaded", function () {
 			setTimeout(function () {
@@ -81,33 +90,33 @@
 
 <body>
 	<h2 th:text="${pass}"></h2>
-	<h1>Product List</h1>
+	<h3 th:text="${fail}"></h3>
+	<h1>Cart Items</h1>
 	<table>
 		<tr>
 			<th>Name</th>
 			<th>Picture</th>
 			<th>Category</th>
-			<th>Stock</th>
 			<th>Price</th>
-			<th>Action</th>
-			<th>Edit</th>
-			<th>Delete</th>
+			<th>Quantity</th>
+			<th>Amount</th>
 		</tr>
-		<tr th:each="product:${products}">
-			<td th:text="${product.name}"></td>
-			<td><img th:src="@{'data:image/jpeg;base64,'+${product.generateBase64Image()}}"></td>
-			<td th:text="${product.category}"></td>
-			<td th:text="${product.stock}"></td>
-			<td th:text="${product.price}+'&#8377'"></td>
-			<td th:if="${product.display==false}"><a th:href="@{'/admin/change/'+${product.id}}"><button>Show</button></a></td>
-			<td th:if="${product.display==true}"><a th:href="@{'/admin/change/'+${product.id}}"><button>Hide</button></a></td>
-			<td><a th:href="@{'/admin/edit/'+${product.id}}"><button>Edit</button></a></td>
-			<td><a th:href="@{'/admin/delete/'+${product.id}}"><button>Delete</button></a></td>
+		<tr th:each="item:${cart.items}">
+			<td th:text="${item.name}"></td>
+			<td><img th:src="@{'data:image/jpeg;base64,'+${item.generateBase64Image()}}"></td>
+			<td th:text="${item.category}"></td>
+			<td th:text="${item.price/item.quantity}"></td>
+			<td th:text="${item.quantity}"></td>
+			<td th:text="${item.price}+'&#8377'"></td>
+		</tr>
+		<tr>
+			<td colspan="5">Total Amount:</td>
+			<td th:text="${cart.totalAmount}+'&#8377'"></td>
 		</tr>
 	</table>
 
 	<br>
-	<a href="/admin/home"><button>Back</button></a>
+	<a href="/customer/home"><button>Back</button></a>
 </body>
 
 </html>

@@ -70,7 +70,30 @@ public class CustomerController {
 	public String addToCart(HttpSession session, ModelMap map, @PathVariable int id) {
 		Customer customer = (Customer) session.getAttribute("customer");
 		if (customer != null) {
-			return customerService.addToCart(customer, id, map);
+			return customerService.addToCart(customer, id, map,session);
+		} else {
+			map.put("fail", "Session Expired, Login Again");
+			return "Home";
+		}
+	}
+	
+	@GetMapping("/fetch-cart")
+	public String viewCart(HttpSession session, ModelMap map)
+	{
+		Customer customer = (Customer) session.getAttribute("customer");
+		if (customer != null) {
+			return customerService.viewCart(customer,map);
+		} else {
+			map.put("fail", "Session Expired, Login Again");
+			return "Home";
+		}
+	}
+	
+	@GetMapping("/cart-remove/{id}")
+	public String removeFromCart(HttpSession session, ModelMap map, @PathVariable int id) {
+		Customer customer = (Customer) session.getAttribute("customer");
+		if (customer != null) {
+			return customerService.removeFromCart(customer, id, map,session);
 		} else {
 			map.put("fail", "Session Expired, Login Again");
 			return "Home";

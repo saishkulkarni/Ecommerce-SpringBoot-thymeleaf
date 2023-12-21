@@ -20,4 +20,6 @@ public class ShoppingCart {
 
 	@OneToMany(cascade = CascadeType.ALL,fetch = FetchType.EAGER)
 	List<Item> items;
+	
+	double totalAmount;
 }
