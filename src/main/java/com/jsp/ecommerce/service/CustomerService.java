@@ -225,8 +225,10 @@ public class CustomerService {
 				// updating stock
 				product.setStock(product.getStock() + 1);
 				productDao.save(product);
-
+				
+				if(item!=null && item.getQuantity()==1)
 				productDao.deleteItem(item);
+				
 				session.setAttribute("customer", customer);
 				map.put("pass", "Product Removed from Cart");
 				return fetchProducts(map, customer);
