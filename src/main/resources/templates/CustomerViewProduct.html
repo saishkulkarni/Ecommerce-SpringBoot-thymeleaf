@@ -17,11 +17,12 @@
 		h1 {
 			color: #333;
 		}
-		
-		h2{
+
+		h2 {
 			color: green;
 		}
-		h3{
+
+		h3 {
 			color: red;
 		}
 
@@ -41,8 +42,8 @@
 		th {
 			background-color: #f2f2f2;
 		}
-		
-		a{
+
+		a {
 			text-decoration: none;
 			font-size: 40px;
 		}
@@ -74,7 +75,7 @@
 			background-color: #555;
 		}
 	</style>
-	
+
 	<script>
 		document.addEventListener("DOMContentLoaded", function () {
 			setTimeout(function () {
@@ -109,11 +110,13 @@
 			<td th:text="${product.price}+'&#8377'"></td>
 			<td th:text="${product.stock}"></td>
 			<td><a th:href="@{'/customer/cart-remove/'+${product.id}}">-</a></td>
-			<td>0</td>
+			<td>
+				<span th:text="${product.getQuantity(items)}"></span>
+			</td>
 			<td><a th:href="@{'/customer/cart-add/'+${product.id}}">+</a></td>
 		</tr>
 	</table>
-<a href="/customer/fetch-cart"><button>Proceed to Cart</button></a>
+	<a href="/customer/fetch-cart"><button>Proceed to Cart</button></a>
 	<br>
 	<a href="/customer/home"><button>Back</button></a>
 </body>

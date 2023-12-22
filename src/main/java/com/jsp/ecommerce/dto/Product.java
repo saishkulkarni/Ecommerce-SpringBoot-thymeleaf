@@ -1,5 +1,7 @@
 package com.jsp.ecommerce.dto;
 
+import java.util.List;
+
 import org.apache.commons.codec.binary.Base64;
 
 import jakarta.persistence.Column;
@@ -29,5 +31,20 @@ public class Product {
 	public String generateBase64Image()
 	{
 	    return Base64.encodeBase64String(this.getPicture());
+	}
+	
+	public int getQuantity(List<Item> items)
+	{
+		int quantity=0;
+		if(items==null)
+			return quantity;
+		else {
+		for(Item item:items)
+		{
+			if(this.name.equals(item.getName()))
+				quantity=item.getQuantity();
+		}
+		return quantity;
+		}
 	}
 }

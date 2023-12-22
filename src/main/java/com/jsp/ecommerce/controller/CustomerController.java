@@ -58,8 +58,9 @@ public class CustomerController {
 
 	@GetMapping("/fetch-products")
 	public String fetchProducts(HttpSession session, ModelMap map) {
-		if (session.getAttribute("customer") != null) {
-			return customerService.fetchProducts(map);
+		Customer customer=(Customer) session.getAttribute("customer");
+		if ( customer!= null) {
+			return customerService.fetchProducts(map,customer);
 		} else {
 			map.put("fail", "Session Expired, Login Again");
 			return "Home";
