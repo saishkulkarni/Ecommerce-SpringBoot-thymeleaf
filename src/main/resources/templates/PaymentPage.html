@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="ISO-8859-1">
+	<title>Insert title here</title>
+</head>
+
+<body>
+	Are you Sure You want to Pay:
+
+	<button id="rzp-button1">Pay with Razorpay</button>
+	<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
+	<script>
+		var options = {
+			"key": "[[${details.key}]]", // Enter the Key ID generated from the Dashboard
+			"amount": "[[${(details.amount)*100}]]", // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
+			"currency": "[[${details.currency}]]",
+			"name": "[[${details.name}]]",
+			"description": "[[${details.description}]]",
+			"image": "[[${details.image}]]",
+			"order_id": "[[${details.order_id}]]", //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
+			"callback_url": "https://www.google.com",
+			"prefill": {
+				"name": "[[${customer.name}]]",
+				"email": "[[${customer.email}]]",
+				"contact": "+91[[${customer.mobile}]]"
+			},
+			"notes": {
+				"address": "Razorpay Corporate Office"
+			},
+			"theme": {
+				"color": "#3399cc"
+			}
+		};
+		var rzp1 = new Razorpay(options);
+		document.getElementById('rzp-button1').onclick = function (e) {
+			rzp1.open();
+			e.preventDefault();
+		}
+	</script>
+</body>
+
+</html>

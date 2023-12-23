@@ -4,6 +4,7 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
 
+import org.json.JSONObject;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.ui.ModelMap;
@@ -12,10 +13,14 @@ import com.jsp.ecommerce.dao.CustomerDao;
 import com.jsp.ecommerce.dao.ProductDao;
 import com.jsp.ecommerce.dto.Customer;
 import com.jsp.ecommerce.dto.Item;
+import com.jsp.ecommerce.dto.PaymentDetails;
 import com.jsp.ecommerce.dto.Product;
 import com.jsp.ecommerce.dto.ShoppingCart;
 import com.jsp.ecommerce.helper.AES;
 import com.jsp.ecommerce.helper.EmailLogic;
+import com.razorpay.Order;
+import com.razorpay.RazorpayClient;
+import com.razorpay.RazorpayException;
 
 import jakarta.servlet.http.HttpSession;
 
@@ -234,6 +239,32 @@ public class CustomerService {
 				return fetchProducts(map, customer);
 			}
 		}
+	}
+
+	public String createOrder(Customer customer, ModelMap map) throws RazorpayException {
+		RazorpayClient client=new RazorpayClient("rzp_test_XdF3iSaishFpgwckm1", "PqyjdLvmXDGKHPmbbQ5UUyoreo");
+		
+		JSONObject object=new JSONObject();
+		object.put("amount", customer.getCart().getTotalAmount()*100);
+		object.put("currency", "INR");
+		
+		Order order = client.orders.create(object);
+		
+		PaymentDetails details=new PaymentDetails();
+		details.setAmount(customer.getCart().getTotalAmount());
+		details.setCurrency(order.get("currency"));
+		details.setDescription("Shopping Cart Payment for the products");
+		details.setImage("https://www.shutterstock.com/image-vector/mobile-application-shopping-online-on-260nw-1379237159.jpg");
+		details.setKey("rzp_test_XdF3iSaishFpgwckm1");
+		details.setName("Ecommerce Shopping");
+		details.setOrder_id(order.get("id"));
+		details.setStatus("created");
+		
+		System.out.println(details);
+		
+		map.put("details", details);
+		map.put("customer", customer);
+		return "PaymentPage";
 	}
 
 }

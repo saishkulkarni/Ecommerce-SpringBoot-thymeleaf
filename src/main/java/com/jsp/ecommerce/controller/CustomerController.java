@@ -12,6 +12,7 @@ import org.springframework.web.bind.annotation.RequestParam;
 
 import com.jsp.ecommerce.dto.Customer;
 import com.jsp.ecommerce.service.CustomerService;
+import com.razorpay.RazorpayException;
 
 import jakarta.servlet.http.HttpSession;
 import jakarta.validation.Valid;
@@ -58,9 +59,9 @@ public class CustomerController {
 
 	@GetMapping("/fetch-products")
 	public String fetchProducts(HttpSession session, ModelMap map) {
-		Customer customer=(Customer) session.getAttribute("customer");
-		if ( customer!= null) {
-			return customerService.fetchProducts(map,customer);
+		Customer customer = (Customer) session.getAttribute("customer");
+		if (customer != null) {
+			return customerService.fetchProducts(map, customer);
 		} else {
 			map.put("fail", "Session Expired, Login Again");
 			return "Home";
@@ -71,30 +72,40 @@ public class CustomerController {
 	public String addToCart(HttpSession session, ModelMap map, @PathVariable int id) {
 		Customer customer = (Customer) session.getAttribute("customer");
 		if (customer != null) {
-			return customerService.addToCart(customer, id, map,session);
+			return customerService.addToCart(customer, id, map, session);
 		} else {
 			map.put("fail", "Session Expired, Login Again");
 			return "Home";
 		}
 	}
-	
+
 	@GetMapping("/fetch-cart")
-	public String viewCart(HttpSession session, ModelMap map)
-	{
+	public String viewCart(HttpSession session, ModelMap map) {
 		Customer customer = (Customer) session.getAttribute("customer");
 		if (customer != null) {
-			return customerService.viewCart(customer,map);
+			return customerService.viewCart(customer, map);
 		} else {
 			map.put("fail", "Session Expired, Login Again");
 			return "Home";
 		}
 	}
-	
+
 	@GetMapping("/cart-remove/{id}")
 	public String removeFromCart(HttpSession session, ModelMap map, @PathVariable int id) {
 		Customer customer = (Customer) session.getAttribute("customer");
 		if (customer != null) {
-			return customerService.removeFromCart(customer, id, map,session);
+			return customerService.removeFromCart(customer, id, map, session);
+		} else {
+			map.put("fail", "Session Expired, Login Again");
+			return "Home";
+		}
+	}
+
+	@GetMapping("/payment")
+	public String createOrder(HttpSession session, ModelMap map) throws RazorpayException {
+		Customer customer = (Customer) session.getAttribute("customer");
+		if (customer != null) {
+			return customerService.createOrder(customer, map);
 		} else {
 			map.put("fail", "Session Expired, Login Again");
 			return "Home";
