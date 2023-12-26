@@ -18,6 +18,7 @@ import com.jsp.ecommerce.dto.Product;
 import com.jsp.ecommerce.dto.ShoppingCart;
 import com.jsp.ecommerce.helper.AES;
 import com.jsp.ecommerce.helper.EmailLogic;
+import com.jsp.ecommerce.repository.PaymentDetailsRepository;
 import com.razorpay.Order;
 import com.razorpay.RazorpayClient;
 import com.razorpay.RazorpayException;
@@ -34,6 +35,9 @@ public class CustomerService {
 
 	@Autowired
 	EmailLogic emailLogic;
+
+	@Autowired
+	PaymentDetailsRepository detailsRepository;
 
 	public String signup(Customer customer, ModelMap map) {
 		// to check Email and Mobile is Unique
@@ -139,43 +143,48 @@ public class CustomerService {
 		if (cart == null)
 			cart = new ShoppingCart();
 
-		List<Item> items = cart.getItems();
-		if (items == null)
-			items = new ArrayList<Item>();
+		if ((cart.getTotalAmount() + product.getPrice()) < 100000) {
+			List<Item> items = cart.getItems();
+			if (items == null)
+				items = new ArrayList<Item>();
 
-		if (product.getStock() > 0) {
-			boolean flag = true;
-			// if item Already Exists in cart
-			for (Item item : items) {
-				if (item.getName().equals(product.getName())) {
-					flag = false;
-					item.setQuantity(item.getQuantity() + 1);
-					item.setPrice(item.getPrice() + product.getPrice());
-					break;
+			if (product.getStock() > 0) {
+				boolean flag = true;
+				// if item Already Exists in cart
+				for (Item item : items) {
+					if (item.getName().equals(product.getName())) {
+						flag = false;
+						item.setQuantity(item.getQuantity() + 1);
+						item.setPrice(item.getPrice() + product.getPrice());
+						break;
+					}
 				}
+				if (flag) {
+					// If item is New in cart
+					Item item = new Item();
+					item.setCategory(product.getCategory());
+					item.setName(product.getName());
+					item.setPicture(product.getPicture());
+					item.setPrice(product.getPrice());
+					item.setQuantity(1);
+					items.add(item);
+				}
+				cart.setItems(items);
+				cart.setTotalAmount(cart.getItems().stream().mapToDouble(x -> x.getPrice()).sum());
+				customer.setCart(cart);
+				customerDao.save(customer);
+				// updating stock
+				product.setStock(product.getStock() - 1);
+				productDao.save(product);
+				session.setAttribute("customer", customer);
+				map.put("pass", "Product Added to Cart");
+				return fetchProducts(map, customer);
+			} else {
+				map.put("fail", "Out of stock");
+				return fetchProducts(map, customer);
 			}
-			if (flag) {
-				// If item is New in cart
-				Item item = new Item();
-				item.setCategory(product.getCategory());
-				item.setName(product.getName());
-				item.setPicture(product.getPicture());
-				item.setPrice(product.getPrice());
-				item.setQuantity(1);
-				items.add(item);
-			}
-			cart.setItems(items);
-			cart.setTotalAmount(cart.getItems().stream().mapToDouble(x -> x.getPrice()).sum());
-			customer.setCart(cart);
-			customerDao.save(customer);
-			// updating stock
-			product.setStock(product.getStock() - 1);
-			productDao.save(product);
-			session.setAttribute("customer", customer);
-			map.put("pass", "Product Added to Cart");
-			return fetchProducts(map, customer);
 		} else {
-			map.put("fail", "Out of stock");
+			map.put("fail", "Out of Transaction Limit");
 			return fetchProducts(map, customer);
 		}
 	}
@@ -230,10 +239,10 @@ public class CustomerService {
 				// updating stock
 				product.setStock(product.getStock() + 1);
 				productDao.save(product);
-				
-				if(item!=null && item.getQuantity()==1)
-				productDao.deleteItem(item);
-				
+
+				if (item != null && item.getQuantity() == 1)
+					productDao.deleteItem(item);
+
 				session.setAttribute("customer", customer);
 				map.put("pass", "Product Removed from Cart");
 				return fetchProducts(map, customer);
@@ -242,29 +251,40 @@ public class CustomerService {
 	}
 
 	public String createOrder(Customer customer, ModelMap map) throws RazorpayException {
-		RazorpayClient client=new RazorpayClient("rzp_test_XdF3iSaishFpgwckm1", "PqyjdLvmXDGKHPmbbQ5UUyoreo");
-		
-		JSONObject object=new JSONObject();
-		object.put("amount", customer.getCart().getTotalAmount()*100);
+		RazorpayClient client = new RazorpayClient("rzp_test_S6TGBrvbUykMqU", "Ps62zRWlFHl45Z9VXPzMN8u8");
+
+		JSONObject object = new JSONObject();
+		object.put("amount", customer.getCart().getTotalAmount() * 100);
 		object.put("currency", "INR");
-		
+
 		Order order = client.orders.create(object);
-		
-		PaymentDetails details=new PaymentDetails();
+
+		PaymentDetails details = new PaymentDetails();
 		details.setAmount(customer.getCart().getTotalAmount());
 		details.setCurrency(order.get("currency"));
 		details.setDescription("Shopping Cart Payment for the products");
-		details.setImage("https://www.shutterstock.com/image-vector/mobile-application-shopping-online-on-260nw-1379237159.jpg");
-		details.setKey("rzp_test_XdF3iSaishFpgwckm1");
+		details.setImage(
+				"https://www.shutterstock.com/image-vector/mobile-application-shopping-online-on-260nw-1379237159.jpg");
+		details.setKeyCode("rzp_test_S6TGBrvbUykMqU");
 		details.setName("Ecommerce Shopping");
 		details.setOrder_id(order.get("id"));
 		details.setStatus("created");
-		
-		System.out.println(details);
-		
+
+		detailsRepository.save(details);
+
 		map.put("details", details);
 		map.put("customer", customer);
 		return "PaymentPage";
+	}
+
+	public String completeOrder(int id, String razorpay_payment_id, Customer customer, ModelMap map) {
+		PaymentDetails details = detailsRepository.findById(id).orElse(null);
+		details.setPayment_id(razorpay_payment_id);
+		details.setStatus("success");
+		detailsRepository.save(details);
+		
+		map.put("pass", "Payment Complete");
+		return "CustomerHome";
 	}
 
 }

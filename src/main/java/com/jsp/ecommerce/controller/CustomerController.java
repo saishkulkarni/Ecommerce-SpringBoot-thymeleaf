@@ -111,4 +111,16 @@ public class CustomerController {
 			return "Home";
 		}
 	}
+	
+	@PostMapping("/payment-complete/{id}")
+	public String completeOrder(@PathVariable int id,HttpSession session,ModelMap map,@RequestParam String razorpay_payment_id)
+	{
+		Customer customer = (Customer) session.getAttribute("customer");
+		if (customer != null) {
+			return customerService.completeOrder(id,razorpay_payment_id,customer, map);
+		} else {
+			map.put("fail", "Session Expired, Login Again");
+			return "Home";
+		}
+	}
 }

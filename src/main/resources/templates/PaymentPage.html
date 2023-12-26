@@ -13,14 +13,14 @@
 	<script src="https://checkout.razorpay.com/v1/checkout.js"></script>
 	<script>
 		var options = {
-			"key": "[[${details.key}]]", // Enter the Key ID generated from the Dashboard
+			"key": "[[${details.keyCode}]]", // Enter the Key ID generated from the Dashboard
 			"amount": "[[${(details.amount)*100}]]", // Amount is in currency subunits. Default currency is INR. Hence, 50000 refers to 50000 paise
 			"currency": "[[${details.currency}]]",
 			"name": "[[${details.name}]]",
 			"description": "[[${details.description}]]",
 			"image": "[[${details.image}]]",
 			"order_id": "[[${details.order_id}]]", //This is a sample Order ID. Pass the `id` obtained in the response of Step 1
-			"callback_url": "https://www.google.com",
+			"callback_url": "http://localhost:1234/customer/payment-complete/[[${details.id}]]",
 			"prefill": {
 				"name": "[[${customer.name}]]",
 				"email": "[[${customer.email}]]",
