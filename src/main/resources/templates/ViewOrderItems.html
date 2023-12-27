@@ -1,0 +1,121 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+	<meta charset="ISO-8859-1">
+	<title>Order Items</title>
+
+	<style>
+		body {
+			font-family: Arial, sans-serif;
+			background-color: #f4f4f4;
+			margin: 0;
+			padding: 0;
+			text-align: center;
+		}
+
+		h1 {
+			color: #333;
+		}
+
+		h2 {
+			color: green;
+		}
+
+		h3 {
+			color: red;
+		}
+
+		table {
+			width: 80%;
+			margin: 20px auto;
+			border-collapse: collapse;
+		}
+
+		th,
+		td {
+			border: 1px solid #ddd;
+			padding: 8px;
+			text-align: left;
+		}
+
+		th {
+			background-color: #f2f2f2;
+		}
+
+		a {
+			text-decoration: none;
+			font-size: 40px;
+		}
+
+		img {
+			max-width: 100px;
+			max-height: 100px;
+		}
+
+		button {
+			padding: 8px 16px;
+			font-size: 14px;
+			cursor: pointer;
+			background-color: #4CAF50;
+			color: #fff;
+			border: none;
+			border-radius: 4px;
+		}
+
+		button:hover {
+			background-color: #45a049;
+		}
+
+		a button {
+			background-color: #333;
+		}
+
+		a button:hover {
+			background-color: #555;
+		}
+	</style>
+
+	<script>
+		document.addEventListener("DOMContentLoaded", function () {
+			setTimeout(function () {
+				var h2Elements = document.querySelectorAll('h2, h3');
+				h2Elements.forEach(function (element) {
+					element.style.display = 'none';
+				});
+			}, 1000);
+		});
+	</script>
+</head>
+
+<body>
+	<h2 th:text="${pass}"></h2>
+	<h3 th:text="${fail}"></h3>
+	<h1>Order Items</h1>
+	<table>
+		<tr>
+			<th>Name</th>
+			<th>Picture</th>
+			<th>Category</th>
+			<th>Price</th>
+			<th>Quantity</th>
+			<th>Amount</th>
+		</tr>
+		<tr th:each="item:${order.items}">
+			<td th:text="${item.name}"></td>
+			<td><img th:src="@{'data:image/jpeg;base64,'+${item.generateBase64Image()}}"></td>
+			<td th:text="${item.category}"></td>
+			<td th:text="${item.price/item.quantity}"></td>
+			<td th:text="${item.quantity}"></td>
+			<td th:text="${item.price}+'&#8377'"></td>
+		</tr>
+		<tr>
+			<td colspan="5">Total Amount:</td>
+			<td th:text="${order.amount}+'&#8377'"></td>
+		</tr>
+	</table>
+	<br>
+	<a href="/customer/fetch-orders"><button>Back</button></a>
+</body>
+
+</html>

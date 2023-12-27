@@ -123,4 +123,28 @@ public class CustomerController {
 			return "Home";
 		}
 	}
+	
+	@GetMapping("/fetch-orders")
+	public String fetchOrders(HttpSession session,ModelMap map)
+	{
+		Customer customer = (Customer) session.getAttribute("customer");
+		if (customer != null) {
+			return customerService.fetchAllorder(customer, map);
+		} else {
+			map.put("fail", "Session Expired, Login Again");
+			return "Home";
+		}
+	}
+	
+	@GetMapping("/order-items/{id}")
+	public String getOrderItems(@PathVariable int id,HttpSession session,ModelMap map)
+	{
+		Customer customer = (Customer) session.getAttribute("customer");
+		if (customer != null) {
+			return customerService.fetchAllorderItems(id,customer, map);
+		} else {
+			map.put("fail", "Session Expired, Login Again");
+			return "Home";
+		}
+	}
 }

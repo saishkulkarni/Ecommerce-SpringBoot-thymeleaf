@@ -1,5 +1,6 @@
 package com.jsp.ecommerce.service;
 
+import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Random;
@@ -16,9 +17,11 @@ import com.jsp.ecommerce.dto.Item;
 import com.jsp.ecommerce.dto.PaymentDetails;
 import com.jsp.ecommerce.dto.Product;
 import com.jsp.ecommerce.dto.ShoppingCart;
+import com.jsp.ecommerce.dto.ShoppingOrder;
 import com.jsp.ecommerce.helper.AES;
 import com.jsp.ecommerce.helper.EmailLogic;
 import com.jsp.ecommerce.repository.PaymentDetailsRepository;
+import com.jsp.ecommerce.repository.ShoppingOrderRepository;
 import com.razorpay.Order;
 import com.razorpay.RazorpayClient;
 import com.razorpay.RazorpayException;
@@ -35,6 +38,9 @@ public class CustomerService {
 
 	@Autowired
 	EmailLogic emailLogic;
+
+	@Autowired
+	ShoppingOrderRepository orderRepository;
 
 	@Autowired
 	PaymentDetailsRepository detailsRepository;
@@ -191,7 +197,7 @@ public class CustomerService {
 
 	public String viewCart(Customer customer, ModelMap map) {
 		ShoppingCart cart = customer.getCart();
-		if (cart == null || cart.getItems().isEmpty()) {
+		if (cart == null || cart.getItems()==null  || cart.getItems().isEmpty()) {
 			map.put("fail", "No Items in Cart");
 			return "CustomerHome";
 		} else {
@@ -282,9 +288,41 @@ public class CustomerService {
 		details.setPayment_id(razorpay_payment_id);
 		details.setStatus("success");
 		detailsRepository.save(details);
+
+		ShoppingOrder order = new ShoppingOrder();
+		order.setAmount(details.getAmount());
+		order.setCustomer(customer);
+		order.setDateTime(LocalDateTime.now());
+		order.setOrder_id(details.getOrder_id());
+		order.setPayment_id(razorpay_payment_id);
+		order.setItems(customer.getCart().getItems());
+
+		orderRepository.save(order);
+		
+		customer.getCart().setItems(null);
+		customerDao.save(customer);
 		
 		map.put("pass", "Payment Complete");
 		return "CustomerHome";
+	}
+
+	public String fetchAllorder(Customer customer, ModelMap map) {
+		List<ShoppingOrder> orders=orderRepository.findByCustomer(customer);
+		if(orders.isEmpty())
+		{
+			map.put("fail", "No Orders Placed Yet");
+			return "CustomerHome";
+		}
+		else {
+			map.put("orders", orders);
+			return "ViewOrders";
+		}
+	}
+
+	public String fetchAllorderItems(int id, Customer customer, ModelMap map) {
+		ShoppingOrder order=orderRepository.findById(id).orElse(null);
+		map.put("order", order);
+		return "ViewOrderItems";
 	}
 
 }
