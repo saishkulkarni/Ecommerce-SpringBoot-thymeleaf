@@ -59,7 +59,7 @@ public class CustomerService {
 			customer.setPassword(AES.encrypt(customer.getPassword(), "123"));
 			customerDao.save(customer);
 			// Send OTP to email
-			// emailLogic.sendOtp(customer);
+			emailLogic.sendOtp(customer);
 			// Carrying id
 			map.put("id", customer.getId());
 			return "EnterOtp";
@@ -110,7 +110,7 @@ public class CustomerService {
 						customer.setOtp(otp);
 						customerDao.save(customer);
 						// Send OTP to email
-						// emailLogic.sendOtp(customer);
+						emailLogic.sendOtp(customer);
 						// Carrying id
 						map.put("fail", "Verify First");
 						map.put("id", customer.getId());
@@ -197,7 +197,7 @@ public class CustomerService {
 
 	public String viewCart(Customer customer, ModelMap map) {
 		ShoppingCart cart = customer.getCart();
-		if (cart == null || cart.getItems()==null  || cart.getItems().isEmpty()) {
+		if (cart == null || cart.getItems() == null || cart.getItems().isEmpty()) {
 			map.put("fail", "No Items in Cart");
 			return "CustomerHome";
 		} else {
@@ -298,29 +298,27 @@ public class CustomerService {
 		order.setItems(customer.getCart().getItems());
 
 		orderRepository.save(order);
-		
+
 		customer.getCart().setItems(null);
 		customerDao.save(customer);
-		
+
 		map.put("pass", "Payment Complete");
 		return "CustomerHome";
 	}
 
 	public String fetchAllorder(Customer customer, ModelMap map) {
-		List<ShoppingOrder> orders=orderRepository.findByCustomer(customer);
-		if(orders.isEmpty())
-		{
+		List<ShoppingOrder> orders = orderRepository.findByCustomer(customer);
+		if (orders.isEmpty()) {
 			map.put("fail", "No Orders Placed Yet");
 			return "CustomerHome";
-		}
-		else {
+		} else {
 			map.put("orders", orders);
 			return "ViewOrders";
 		}
 	}
 
 	public String fetchAllorderItems(int id, Customer customer, ModelMap map) {
-		ShoppingOrder order=orderRepository.findById(id).orElse(null);
+		ShoppingOrder order = orderRepository.findById(id).orElse(null);
 		map.put("order", order);
 		return "ViewOrderItems";
 	}
